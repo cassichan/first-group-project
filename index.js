@@ -7,6 +7,7 @@ import { initializeApp, cert, getApps } from "firebase-admin/app";
 const app = express();
 app.use(express.json());
 app.use(cors());
+
 const PORT = 4000;
 
 if (getApps().length === 0) {
@@ -25,8 +26,19 @@ app.listen(PORT, () => {
 //Routes
 
 //Test
-app.get("/", (req, res) => {
-  res.status(200).send("Hello World");
+// app.get("/", (req, res) => {
+//   res.status(200).send("Hello World");
+// });
+
+//get celebrity collection
+app.get("/getallcelebs", (req, res) => {
+  // const dbConnect = dbconnect();
+  db.collection('celebrities').get()
+  .then(collection => {
+    const celebrities = collection.docs.map(doc => doc.data());
+  res.send((celebrities)); 
+  })
+  .catch(err => console.log(err));
 });
 
 //Add a new celebrity to firestore database
